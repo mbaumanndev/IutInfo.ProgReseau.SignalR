@@ -10,7 +10,7 @@ namespace IutInfo.ProgReseau.SignalR.WebUi.Controllers
     public class HomeController : Controller
     {
         private IHubContext<MessengerHub> m_context;
-        public HomeController(IHubContext<MessengerHub> context)
+        public HomeController(IHubContext<MessengerHub> context) // On demande au framework de charger notre contexte de Hub
         {
             m_context = context;
         }
@@ -22,6 +22,7 @@ namespace IutInfo.ProgReseau.SignalR.WebUi.Controllers
 
         public async Task<IActionResult> Messenger()
         {
+            // Une fois charger, on peut consommer les événements proposés par le Hub pour agir sur les clients
             await m_context.Clients.All.SendAsync("ReceiveMessage", "system", "Nouveau user");
             return View();
         }
