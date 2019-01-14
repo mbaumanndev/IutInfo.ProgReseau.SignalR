@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IutInfo.ProgReseau.SignalR.WebUi.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -32,6 +33,9 @@ namespace IutInfo.ProgReseau.SignalR.WebUi
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddSignalR()
+                .AddMessagePackProtocol();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +52,12 @@ namespace IutInfo.ProgReseau.SignalR.WebUi
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<MessengerHub>("/messenger");
+                routes.MapHub<StreamHub>("/stream");
+            });
 
             app.UseMvc(routes =>
             {

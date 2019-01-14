@@ -1,17 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using IutInfo.ProgReseau.SignalR.WebUi.Hubs;
 using IutInfo.ProgReseau.SignalR.WebUi.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace IutInfo.ProgReseau.SignalR.WebUi.Controllers
 {
     public class HomeController : Controller
     {
+        private IHubContext<MessengerHub> m_context;
+        public HomeController(IHubContext<MessengerHub> context)
+        {
+            m_context = context;
+        }
+
         public IActionResult Index()
         {
+            return View();
+        }
+
+        public async Task<IActionResult> Messenger()
+        {
+            await m_context.Clients.All.SendAsync("ReceiveMessage", "system", "Nouveau user");
             return View();
         }
 
